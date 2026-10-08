@@ -2,7 +2,7 @@
 
 ## PROG8431 – Data Analysis, Mathematics, Modeling and Algorithms
 
-**Group 7 – Data Analysis**
+## Group 7 – Data Analysis
 
 ### Team Members
 
@@ -60,6 +60,57 @@ We calculate descriptive statistics including:
 
 We also compare bike rental demand across different seasons.
 
+## Statistical Tests
+
+We performed statistical tests to understand daily bike rental patterns.
+
+### 1. Normality Test (Shapiro-Wilk)
+
+We used a QQ-plot and the Shapiro-Wilk test to check whether daily bike rentals follow a normal distribution.
+
+The overall p-value was below 0.05, showing evidence of non-normality.
+
+We also tested Winter and Summer separately. Both groups showed evidence of non-normality.
+
+### 2. F-Test
+
+We used the F-test to compare the variances of daily bike rentals in Winter and Summer.
+
+* F-statistic: 1.09
+* P-value: 0.572
+
+We did not find enough evidence that the two variances were different.
+
+However, the data did not satisfy the normality assumption of the traditional F-test.
+
+### 3. Levene's Test
+
+We performed Levene's test as an additional variance comparison because it is less sensitive to non-normal data.
+
+* Test statistic: 2.3327
+* P-value: 0.127543
+
+We did not find enough evidence that Winter and Summer variances were different.
+
+### 4. Welch's T-Test
+
+We used Welch's t-test to compare average daily bike rentals between Winter and Summer.
+
+* Winter average: 2,604 rentals
+* Summer average: 5,644 rentals
+* T-score: 20.42
+* P-value: Below 0.001
+
+The results showed a statistically significant difference between the seasonal averages under the test assumptions.
+
+### Limitations
+
+Our dataset contains historical observations from 2011 to 2012.
+
+Daily observations may be related over time, which can affect statistical test results.
+
+Our findings show historical associations, not proof of causation.
+
 ## Visualizations
 
 The project includes four visualizations:
@@ -79,6 +130,7 @@ The project includes four visualizations:
 * Matplotlib
 * Matplotlib-Venn
 * Git/GitHub
+* SciPy – Statistical testing and analysis
 
 ## How to Run the Project
 
