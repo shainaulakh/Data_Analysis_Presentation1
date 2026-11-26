@@ -12,16 +12,17 @@
 
 ## Project Overview
 
-This project analyzes historical Capital Bikeshare data to understand how **temperature and season are associated with daily bike rental demand**.
+We study daily Capital Bikeshare rentals in Washington, D.C. We compare seasons, group days with similar demand, and test how accurately weather and calendar information can predict rental counts.
 
-The project includes two related analyses:
+The project includes three related analyses:
 
 1. **Statistical analysis:** Explore rental distributions and compare Winter and Summer using descriptive statistics and statistical tests.
 2. **K-means clustering:** Identify groups of days with similar temperatures and rental counts, then examine their characteristics and seasonal patterns.
+3. **[Workshop C – Regression](src/Workshop_C/Group_7_Bike_Sharing_Workshop_C.ipynb):** Compare temperature alone, rain alone, and two models that combine weather and calendar information.
 
 Each record represents **one day**, not an individual customer or bicycle.
 
-The analyses describe historical patterns. They do not predict future demand or prove that weather causes changes in rentals.
+We evaluate predictions on historical days from 2011–2012. Forecasting a future season would require testing on later dates using weather information available at prediction time.
 
 ## Research Questions
 
@@ -36,6 +37,10 @@ How do Winter and Summer differ in their rental distributions, variability and a
 ### K-Means Clustering
 
 Can K-means clustering identify meaningful groups of daily bike rental demand based on temperature and total rentals, and what can these groups tell us about seasonal rental patterns?
+
+### Workshop C – Regression
+
+How accurately can we predict daily rentals from weather and calendar variables, and does combining predictors improve on temperature or rainfall alone?
 
 ## Dataset
 
@@ -356,6 +361,21 @@ A **100% stacked bar chart** visualizes these patterns.
 
 Summer days appear in both moderate-demand and high-demand clusters, showing differences beyond season labels alone.
 
+## Part C – Predicting Daily Rentals
+
+We matched Capital Bikeshare records with daily Open-Meteo weather observations by date. All 731 days matched. We kept 25 predictors, including rainfall, sunshine, holidays and weekdays. We excluded casual and registered rental counts because they add up to the target, `cnt`. [Workshop C notebook](src/Workshop_C/Group_7_Bike_Sharing_Workshop_C.ipynb)
+
+We trained each model on the same 511 days and tested it on the remaining 220 days. For the smaller model, we started with all 25 predictors and used backward elimination on the training data. Ten predictors remained. The table reports training R² and prediction error in rentals per day. A lower test RMSE means closer predictions on the held-out days.
+
+| Model | R² | Adjusted R² | Training RMSE | Test RMSE |
+|---|---:|---:|---:|---:|
+| Temperature only | 0.3980 | 0.3968 | 1,480.05 | 1,569.03 |
+| Rainfall only | 0.0487 | 0.0468 | 1,860.56 | 1,891.61 |
+| Full model (25 predictors) | 0.8791 | 0.8662 | 663.40 | **651.19** |
+| Smaller model (10 predictors) | 0.8735 | 0.8664 | 678.56 | 676.98 |
+
+The full model gave the lowest test error. Its test RMSE was **58.5% lower** than temperature alone. Removing 15 predictors increased test RMSE by only **25.79 rentals per day**, so the smaller model came close with fewer inputs.
+
 ## Practical Business Insights
 
 ### 1. Investigate Capacity for High-Demand Periods
@@ -391,6 +411,7 @@ These insights suggest opportunities for further analysis rather than automatic 
 - Matplotlib-Venn
 - SciPy
 - Scikit-learn
+- Statsmodels
 - Git/GitHub
 
 ## How to Run the Project
@@ -398,15 +419,15 @@ These insights suggest opportunities for further analysis rather than automatic 
 1. Clone or download the repository.
 2. Open the project in Visual Studio Code or a Jupyter-compatible editor.
 3. Install the required libraries.
-4. Place `day.csv` inside the project's `data` folder.
-5. Open the statistical or K-means notebook.
+4. Keep the supplied CSV files in the repository’s `data` folder.
+5. Open the statistical, K-means, or Workshop C notebook.
 6. Select the correct Python kernel.
 7. Restart the kernel and run all cells from top to bottom.
 
 ### Install Dependencies
 
 ```bash
-python -m pip install pandas numpy matplotlib matplotlib-venn scipy scikit-learn
+python -m pip install pandas numpy matplotlib matplotlib-venn scipy scikit-learn statsmodels jinja2
 ```
 
 For standalone JupyterLab:
@@ -431,6 +452,10 @@ Checks `data/day.csv` and `../data/day.csv`. If neither exists, the code downloa
 **K-means notebook**
 
 Searches the current folder and its parent folders for `data/day.csv`. It does not download the dataset automatically.
+
+**Workshop C notebook**
+
+Searches the current folder and its parents for `data/day.csv` and `data/open_meteo_weather.csv`. Both files are included in the repository.
 
 ## Troubleshooting
 
@@ -473,7 +498,7 @@ These are proposed improvements unless their implementation is shown in the note
 
 ## Presentation
 
-The notebooks include five-minute presentation guides covering:
+The statistical and K-means notebooks include five-minute presentation guides. For Workshop C, we present from the submitted regression notebook within the seven-minute limit. The presentations cover:
 
 1. Research question and project context
 2. Dataset and preparation
@@ -490,14 +515,17 @@ The statistical analysis shows higher observed average rentals in Summer than Wi
 
 The K-means analysis identifies four understandable types of rental days. Their seasonal composition provides additional detail beyond a comparison of seasons alone.
 
-Together, these analyses provide a starting point for investigating historical demand patterns and possible operational planning opportunities.
+In Workshop C, the combined weather and calendar model predicted historical daily rentals more accurately than either single-predictor model.
 
 ## References
 
 Fanaee-T, H. (2013). *Bike Sharing* [Dataset]. UCI Machine Learning Repository.  
 https://doi.org/10.24432/C5W894
 
+Open-Meteo. [Historical Weather API documentation](https://open-meteo.com/en/docs/historical-weather-api)
+
 PROG8431 course materials:
 
 - Problem Analysis Workshop B – K-Means Clustering
 - Week 7 clustering lecture and demonstration materials
+- Problem Analysis Workshop C – Transformation/Linear Regression
